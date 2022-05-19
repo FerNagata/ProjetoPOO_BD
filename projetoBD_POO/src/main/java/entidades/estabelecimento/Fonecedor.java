@@ -6,6 +6,7 @@ public class Fonecedor {
     private String nome;
     private double orcamento;
     private int estoque;
+    public int Caixa_id;
 
     public Fonecedor(int cnpj, String endereco, String nome, double orcamento, int estoque) {
         this.cnpj = cnpj;

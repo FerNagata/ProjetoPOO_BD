@@ -1,7 +1,7 @@
 package entidades.estabelecimento;
 
 public class Caixa {
-    private int id;
+    private static int id;
     private double lucro;
 
     public Caixa(int id, double lucro) {
