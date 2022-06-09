@@ -1,13 +1,20 @@
 package entidades.cliente;
 
 public abstract class Cliente {
-    protected int cpf;
+    protected String cpf;
     protected String nome;
     protected String telefone;
     protected String email;
-    protected double gasto;
+    protected double gasto = 0;
 
-    public Cliente(int cpf, String nome, String telefone, String email, double gasto) {
+    public Cliente(String cpf, String nome, String telefone, String email) {
+        this.cpf = cpf;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    public Cliente(String cpf, String nome, String telefone, String email, double gasto) {
         this.cpf = cpf;
         this.nome = nome;
         this.telefone = telefone;
@@ -15,11 +22,13 @@ public abstract class Cliente {
         this.gasto = gasto;
     }
 
-    public int getCpf() {
+    public Cliente(){}
+
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 

@@ -1,25 +1,29 @@
 package entidades.cliente;
 
-public class Avulso extends Cliente {
-    private static int idAvulsoaux;
-    private int idAvulso;
-    public int Cliente_cpf;
+import Controler.AvulsoDB;
 
-    public Avulso(int cpf, String nome, String telefone, String email, double gasto) {
-        super(cpf, nome, telefone, email, gasto);
-        idAvulso = idAvulsoaux++;
+public class Avulso extends Cliente {
+    private int idAvulso;
+    public String Cliente_cpf;
+    AvulsoDB avulsoDB = new AvulsoDB();
+
+    public Avulso(String cpf, String nome, String telefone, String email) {
+        super(cpf, nome, telefone, email);
+        idAvulso = (avulsoDB.researchAvulso() + 1);
         Cliente_cpf = cpf;
+    }
+
+    public Avulso(String cpf, String nome, String telefone, String email, double gasto) {
+        super(cpf, nome, telefone, email, gasto);
+        Cliente_cpf = cpf;
+    }
+
+    public Avulso(){
+        idAvulso = (avulsoDB.researchAvulso() + 1);
     }
 
     public int getIdAvulso() {
         return idAvulso;
     }
 
-    public int getCliente_cpf() {
-        return Cliente_cpf;
-    }
-
-    public void setCliente_cpf(int cliente_cpf) {
-        Cliente_cpf = cliente_cpf;
-    }
 }

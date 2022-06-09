@@ -1,14 +1,32 @@
 package entidades.funcionario;
 
+import Controler.LoginDB;
+
 public class Login {
-    private static int idLogin;
+    static int idLoginAux = 0;
+    private int idLogin;
     private String email;
     private String senha;
+    LoginDB loginDB = new LoginDB();
 
     public Login(String email, String senha) {
         this.email = email;
         this.senha = senha;
-        idLogin++;
+        idLoginAux++;
+        idLogin = idLoginAux;
+    }
+
+    public Login(int idLogin, String email, String senha){
+        this.idLogin = idLogin;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Login(){
+        idLogin = (loginDB.researchLogin() + 1);
+
+        //idLoginAux++;
+        //idLogin = idLoginAux;
     }
 
     public int getIdLogin() {

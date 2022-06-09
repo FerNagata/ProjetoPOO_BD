@@ -1,25 +1,24 @@
 package entidades.cliente;
 
-public class Fidelidade extends Cliente {
-    private static int idFidelidadeAux;
-    private int idFidelidade;
-    public int Cliente_cpf;
+import Controler.FidelidadeDB;
 
-    public Fidelidade(int cpf, String nome, String telefone, String email, double gasto,int idFidelidade) {
-        super(cpf, nome, telefone, email, gasto);
-        //Cliente_cpf = cpf;?
-        idFidelidade = idFidelidadeAux++;
+public class Fidelidade extends Cliente {
+    private int idFidelidade;
+    public String Cliente_cpf;
+    FidelidadeDB fidelidadeDB = new FidelidadeDB();
+
+    public Fidelidade(String cpf, String nome, String telefone, String email) {
+        super(cpf, nome, telefone, email);
+        idFidelidade = (fidelidadeDB.researchFidelidade() + 1);
+        Cliente_cpf = cpf;
+    }
+
+    public Fidelidade(){
+        idFidelidade = (fidelidadeDB.researchFidelidade() + 1);
     }
 
     public int getIdFidelidade() {
         return idFidelidade;
     }
 
-    public int getCliente_cpf() {
-        return Cliente_cpf;
-    }
-
-    public void setCliente_cpf(int cliente_cpf) {
-        Cliente_cpf = cliente_cpf;
-    }
 }

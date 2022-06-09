@@ -7,15 +7,11 @@ import java.util.ArrayList;
 public class AvulsoDB extends Database{
     public boolean insertAvulso(Avulso avulso){
         connect();
-        String sql = "INSERT INTO avulso(cpf,nome,telefone,email,gasto, idAvulso) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO avulso(idAvulso, Cliente_cpf) VALUES (?,?)";
         try{
             pst = connection.prepareStatement(sql);
-            pst.setInt(1,avulso.getCpf());
-            pst.setString(2, avulso.getNome());
-            pst.setString(3, avulso.getTelefone());
-            pst.setString(4, avulso.getEmail());
-            pst.setDouble(5,avulso.getGasto());
-            pst.setInt(6, avulso.getIdAvulso());
+            pst.setInt(1, avulso.getIdAvulso());
+            pst.setString(2, avulso.getCpf());
             pst.execute();
             check = true;
         }
@@ -35,30 +31,17 @@ public class AvulsoDB extends Database{
         return check;
     }
 
-    public ArrayList<Avulso> researchAluno(){
+    public int researchAvulso(){
         connect();
-        ArrayList<Avulso> avulsos = new ArrayList<>();
-        String sql = "SELECT * from avulso";
+        String sql = "SELECT * from avulso order by idAvulso";
+        int id = 0;
 
         try{
             statement = connection.createStatement();
             result = statement.executeQuery(sql);
 
             while(result.next()){
-                Avulso avulsoTemp = new Avulso(result.getInt("cpf"),result.getString("nome"),result.getString("telefone"),
-                        result.getString("email"),result.getDouble("gasto"));
-                avulsoTemp.setCpf(result.getInt("cpf"));
-                avulsoTemp.Cliente_cpf = result.getInt("Cliente_cpf");
-                System.out.println("Cpf = " + avulsoTemp.getCpf());
-                System.out.println("Nome = " + avulsoTemp.getNome());
-                System.out.println("Telefone = " + avulsoTemp.getTelefone());
-                System.out.println("Email = " + avulsoTemp.getEmail());
-                System.out.println("Gasto = " + avulsoTemp.getGasto());
-                System.out.println("IdAvulso = " + avulsoTemp.getIdAvulso());
-                if(avulsoTemp.Cliente_cpf > 0)
-                    System.out.println("Cliente_cpf = " + avulsoTemp.Cliente_cpf);
-                System.out.println("-------------------------------");
-                avulsos.add(avulsoTemp);
+                id = result.getInt("idAvulso");
             }
         }catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -73,20 +56,21 @@ public class AvulsoDB extends Database{
                 System.out.println("Erro ao fechar a conexão: " + e.getMessage());
             }
         }
-        return avulsos;
+        return id;
     }
 
-    public boolean updateFkAvulso(int cpf, int Cliente_cpf){
+    public boolean updateFkAvulso(Avulso avulso){
         connect();
-        String sql = "UPDATE avulso SET Cliente_cpf=? WHERE cpf=?";
+        String sql = "UPDATE avulso SET Cliente_cpf=? WHERE idAvulso=?";
         try{
             pst = connection.prepareStatement(sql);
-            pst.setInt(1,cpf);
-            pst.setInt(2, Cliente_cpf);
+            pst.setString(1, avulso.getCpf());
+            pst.setInt(2, avulso.getIdAvulso());
             pst.execute();
             check = true;
         }catch (SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
+            System.out.println("Cliente não encontrado!");
             check = false;
         }
         finally {
@@ -101,12 +85,12 @@ public class AvulsoDB extends Database{
         return check;
     }
 
-    public boolean deleteAvulso(int cpf){
+    public boolean deleteAvulso(String cpf){
         connect();
-        String sql = "DELETE FROM avulso WHERE cpf=?";
+        String sql = "DELETE FROM avulso WHERE Cliente_cpf=?";
         try{
             pst = connection.prepareStatement(sql);
-            pst.setInt(1,cpf);
+            pst.setString(1,cpf);
             pst.execute();
             check = true;
         }catch (SQLException e){

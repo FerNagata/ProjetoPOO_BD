@@ -1,19 +1,19 @@
 package Controler;
 
-import entidades.cliente.Avulso;
-import entidades.cliente.Fidelidade;
-
 import java.sql.*;
 import java.util.ArrayList;
+import entidades.estabelecimento.Fornecedor;
 
-public class FidelidadeDB extends Database {
-    public boolean insertFidelidade(Fidelidade fidelidade){
+public class FornecedorDB extends Database{
+    public boolean insertFornecedor(Fornecedor fornecedor){
         connect();
-        String sql = "INSERT INTO fidelidade(idFidelidade, Cliente_cpf) VALUES (?,?)";
+        String sql = "INSERT INTO fornecedor(cnpj, endereco, nome, Caixa_id) VALUES (?,?,?,?)";
         try{
             pst = connection.prepareStatement(sql);
-            pst.setInt(1,fidelidade.getIdFidelidade());
-            pst.setString(2,fidelidade.getCpf());
+            pst.setString(1,fornecedor.getCnpj());
+            pst.setString(2, fornecedor.getEndereco());
+            pst.setString(3,fornecedor.getNome());
+            pst.setInt(4,fornecedor.Caixa_id);
             pst.execute();
             check = true;
         }
@@ -33,16 +33,28 @@ public class FidelidadeDB extends Database {
         return check;
     }
 
-    public int researchFidelidade(){
+    public int researchFornecedor(){
         connect();
-        String sql = "SELECT * from fidelidade order by idFidelidade";
-        int id = 0;
+        int aux = 0;
+        ArrayList<Fornecedor> fornecedores = new ArrayList<>();
+        String sql = "SELECT * from fornecedor";
+
         try{
             statement = connection.createStatement();
             result = statement.executeQuery(sql);
 
             while(result.next()){
-                id = result.getInt("idFidelidade");
+                Fornecedor fornecedorTemp = new Fornecedor(result.getString("cnpj"),result.getString("endereco"),result.getString("nome"));
+                fornecedorTemp.setCnpj(result.getString("cnpj"));
+                fornecedorTemp.Caixa_id = result.getInt("Caixa_id");
+                System.out.println("Cnpj = " + fornecedorTemp.getCnpj());
+                System.out.println("Endereço = " + fornecedorTemp.getEndereco());
+                System.out.println("Nome = " + fornecedorTemp.getNome());
+                if(fornecedorTemp.Caixa_id > 0)
+                    System.out.println("Caixa_id = " + fornecedorTemp.Caixa_id);
+                System.out.println("-------------------------------");
+                fornecedores.add(fornecedorTemp);
+                aux++;
             }
         }catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -57,41 +69,18 @@ public class FidelidadeDB extends Database {
                 System.out.println("Erro ao fechar a conexão: " + e.getMessage());
             }
         }
-        return id;
+
+        return aux;
     }
 
-    public boolean updateFkFidelidade(Fidelidade fidelidade){
+    public boolean updateFkFornecedor(Fornecedor fornecedor, String cnpj){
         connect();
-        String sql = "UPDATE fidelidade SET Cliente_cpf=? WHERE idFidelidade=?";
+        String sql = "UPDATE fornecedor SET endereco=?,nome=? WHERE cnpj=?";
         try{
             pst = connection.prepareStatement(sql);
-            pst.setString(1, fidelidade.getCpf());
-            pst.setInt(2, fidelidade.getIdFidelidade());
-            pst.execute();
-            check = true;
-        }catch (SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-            System.out.println("Cliente não encontrado!");
-            check = false;
-        }
-        finally {
-            try{
-                connection.close();
-                pst.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return check;
-    }
-
-    public boolean deleteFidelidade(String cpf){
-        connect();
-        String sql = "DELETE FROM fidelidade WHERE Cliente_cpf=?";
-        try{
-            pst = connection.prepareStatement(sql);
-            pst.setString(1,cpf);
+            pst.setString(1, fornecedor.getEndereco());
+            pst.setString(2, fornecedor.getNome());
+            pst.setString(3, cnpj);
             pst.execute();
             check = true;
         }catch (SQLException e){
@@ -109,4 +98,5 @@ public class FidelidadeDB extends Database {
         }
         return check;
     }
+
 }

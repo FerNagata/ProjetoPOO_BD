@@ -7,14 +7,16 @@ import entidades.funcionario.Login;
 public class LoginDB extends Database {
     public boolean insertLogin(Login login){
         connect();
-        String sql = "INSERT INTO login(email, senha) VALUES (?,?)";
+        String sql = "INSERT INTO login(email, senha, idLogin) VALUES (?,?,?);";
         try{
             pst = connection.prepareStatement(sql);
             pst.setString(1, login.getEmail());
             pst.setString(2,login.getSenha());
+            pst.setInt(3,login.getIdLogin());
             pst.execute();
             check = true;
         }
+
         catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
             check = false;
@@ -31,23 +33,19 @@ public class LoginDB extends Database {
         return check;
     }
 
-    public ArrayList<Login> researchLogin(){
+    public int researchLogin(){
         connect();
-        ArrayList<Login> logins = new ArrayList<>();
-        String sql = "SELECT * from login";
+        String sql = "SELECT idLogin from login";
+        int idLogin = 0;
 
         try{
             statement = connection.createStatement();
             result = statement.executeQuery(sql);
 
             while(result.next()){
-                Login loginTemp = new Login(result.getString("email"),result.getString("senha"));
-                loginTemp.setIdLogin(result.getInt("idLogin"));
-                System.out.println("idLogin = " + loginTemp.getIdLogin());
-                System.out.println("Email = " + loginTemp.getEmail());
-                System.out.println("-------------------------------");
-                logins.add(loginTemp);
+                idLogin = result.getInt("idLogin");
             }
+
         }catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
         }
@@ -61,15 +59,52 @@ public class LoginDB extends Database {
                 System.out.println("Erro ao fechar a conexão: " + e.getMessage());
             }
         }
-        return logins;
+        return idLogin;
     }
 
-    public boolean updateSenha(String senha, int idLogin){
+    public int researchLogin(String email, String senha){
         connect();
-        String sql = "UPDATE login SET senha=? WHERE idLogin=?";
+        String sql = "SELECT idLogin from login where email=? and senha=?";
+        int idLogin = 0;
+
         try{
             pst = connection.prepareStatement(sql);
-            pst.setString(1, senha);
+            pst.setString(1,email);
+            pst.setString(2, senha);
+            pst.execute();
+            result = pst.executeQuery();
+
+
+            while(result.next()){
+
+                idLogin = result.getInt("idLogin");
+
+             }
+
+        }catch(SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+        }
+        finally {
+            try{
+                connection.close();
+                result.close();
+                pst.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return idLogin;
+    }
+
+    public boolean updateLogin(Login login, int idLogin){
+        connect();
+        String sql = "UPDATE login SET email=?, senha=? WHERE idLogin=?";
+        try{
+            pst = connection.prepareStatement(sql);
+            pst.setString(1, login.getEmail());
+            pst.setString(2, login.getSenha());
+            pst.setInt(3, idLogin);
             pst.execute();
             check = true;
         }catch (SQLException e){

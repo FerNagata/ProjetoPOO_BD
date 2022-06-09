@@ -1,18 +1,33 @@
 package entidades.estabelecimento;
 
+import Controler.ProdutoDB;
+
 public class Produto {
-    private static int idProdutoAux;
     private int idProduto;
+    private String nome;
     private double custo;
     private double preco;
     public int Caixa_id;
-    public int Cliente_cpf;
+    public String Cliente_cpf;
+    ProdutoDB produtoDB = new ProdutoDB();
 
-    public Produto(int idProduto, double custo, double preco) {
-        this.idProduto = idProdutoAux++;
+    public Produto(String nome, double custo, double preco) {
+        idProduto = (produtoDB.researchProduto() + 1);
+        this.nome = nome;
         this.custo = custo;
         this.preco = preco;
+    }
 
+    public Produto(){
+        idProduto = (produtoDB.researchProduto() + 1);
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public int getIdProduto() {
@@ -39,19 +54,4 @@ public class Produto {
         this.preco = preco;
     }
 
-    public int getCaixa_id() {
-        return Caixa_id;
-    }
-
-    public void setCaixa_id(int caixa_id) {
-        Caixa_id = caixa_id;
-    }
-
-    public int getCliente_cpf() {
-        return Cliente_cpf;
-    }
-
-    public void setCliente_cpf(int cliente_cpf) {
-        Cliente_cpf = cliente_cpf;
-    }
 }
