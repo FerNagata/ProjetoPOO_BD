@@ -40,9 +40,12 @@ public class Main {
                             FuncionarioDB funcionarioDB = new FuncionarioDB();
                             idCaixaAux = funcionarioDB.researchFuncionarioIdCaixaComLogin(lBD.researchLogin(email,senha));
                             flag = false;
+                            System.out.println("------------------------------------------------\n");
                         }
-                        else
+                        else {
+                            System.out.println("------------------------------------------------");
                             System.out.println("Senha ou email incorreto.");
+                        }
                     }catch(NullPointerException e){
                         System.out.println("Login não encontrado!");
                     }
@@ -87,21 +90,21 @@ public class Main {
         flag = true;
 
         while(flag){
-            System.out.println("------------------------------------------------");
+            System.out.println("\n------------------------------------------------");
             System.out.println("                  Bem vindo!");
             System.out.println("------------------------------------------------");
             System.out.println("O que você gostaria de fazer, hoje? ");
             System.out.println("1 - Adicionar novo cliente;");
             System.out.println("2 - Adicionar novo fornecedor;");
             System.out.println("3 - Adicionar novo produto;");
-            System.out.println("4 - Compra feita por um cliente avulso;");
-            System.out.println("5 - Compra feita por um cliente fidelidade;");
-            System.out.println("6 - Mostrar fornecedores;");
-            System.out.println("7 - Mostrar lucro bruto ganho;");
-            System.out.println("8 - Mostrar total das despesas;");
-            System.out.println("9 - Mostrar lucro líquido ganho;");
-            System.out.println("10 - Mostrar todos os funcionários;");
-            System.out.println("11 - Mostrar todos os cliente;");
+            System.out.println("4 - Compra feita por um cliente;");
+            System.out.println("5 - Mostrar fornecedores;");
+            System.out.println("6 - Mostrar lucro bruto ganho;");
+            System.out.println("7- Mostrar total das despesas;");
+            System.out.println("8 - Mostrar lucro líquido ganho;");
+            System.out.println("9 - Mostrar todos os funcionários;");
+            System.out.println("10 - Mostrar todos os cliente;");
+            System.out.println("11 - Mostrar todos os produtos;");
             System.out.println("12 - Alterar cadastro do cliente;");
             System.out.println("13 - Alterar cliente avulso para fidelidade.");
             System.out.println("14 - Alterar cliente fidelidade para avulso.");
@@ -116,7 +119,7 @@ public class Main {
             System.out.println("------------------------------------------------");
 
             switch (op){
-                case 1:
+                case 1: //Adicionar novo cliente
                     System.out.println(" O cliente será fidelidade ou avulso: ");
                     System.out.println("1 - Fidelidade");
                     System.out.println("2 - Avulso");
@@ -163,7 +166,7 @@ public class Main {
                         System.out.println("Opção invalida");
                     }
                     break;
-                case 2:
+                case 2: //Adicionar novo fornecedor
                     sc.nextLine();
                     Fornecedor forn = new Fornecedor();
                     FornecedorDB fornDB = new FornecedorDB();
@@ -176,7 +179,7 @@ public class Main {
                     forn.Caixa_id = idCaixaAux;
                     fornDB.insertFornecedor(forn);
                     break;
-                case 3:
+                case 3: //Adicionar novo produto
                     Produto p = new Produto();
                     ProdutoDB proDB = new ProdutoDB();
                     System.out.print("Digite o id do novo produto: ");
@@ -191,7 +194,7 @@ public class Main {
                     p.Caixa_id = idCaixaAux;
                     proDB.insertProduto(p);
                     break;
-                case 4:
+                case 4: //Compra feita por um cliente
                     FuncionarioDB funcionarioDB1 = new FuncionarioDB();
                     try {
                         sc.nextLine();
@@ -199,30 +202,17 @@ public class Main {
                         String cpf = sc.nextLine();
                         System.out.print("Digite o idProduto: ");
                         int idProduto = sc.nextInt();
-                        funcionarioDB1.comprarAvulso(cpf, idProduto, idCaixaAux);
+                        funcionarioDB1.comprar(cpf, idProduto, idCaixaAux);
                     }catch(Exception e) {
                         System.out.println("Erro: " + e);
                     }
                     break;
-                case 5:
-                    FuncionarioDB funcionarioDB2 = new FuncionarioDB();
-                    try {
-                        sc.nextLine();
-                        System.out.print("Digite o cpf do cliente: ");
-                        String cpf = sc.nextLine();
-                        System.out.print("Digite o idProduto: ");
-                        int idProduto = sc.nextInt();
-                        funcionarioDB2.comprarFidelidade(cpf, idProduto, idCaixaAux);
-                    }catch(Exception e) {
-                        System.out.println("Erro: " + e);
-                    }
-                    break;
-                case 6:
+                case 5: //Mostrar fornecedores
                     FornecedorDB fornecedorDB = new FornecedorDB();
                     if(fornecedorDB.researchFornecedor() == 0)
                         System.out.println("A loja ainda não possui fornecedor.");
                     break;
-                case 7:
+                case 6: //Mostrar lucro bruto ganho
                     CaixaDB caixaDB1 = new CaixaDB();
                     double lucrototal = caixaDB1.calculoDoLucro();
                     try{
@@ -230,11 +220,12 @@ public class Main {
                             System.out.println("A loja ainda não possui lucro");
                         else
                             System.out.println("Lucro total: " + lucrototal);
+                        System.out.println("------------------------------------------------");
                     }catch (Exception e){
                         System.out.println("Erro: " + e);
                     }
                     break;
-                case 8:
+                case 7: //Mostrar total das despesas
                     CaixaDB caixaDB2 = new CaixaDB();
                     double despesas = caixaDB2.despesasTotais();
                     try{
@@ -242,11 +233,12 @@ public class Main {
                             System.out.println("A loja ainda não possui despesas");
                         else
                             System.out.println("Despesa total: " + despesas);
+                        System.out.println("------------------------------------------------");
                     }catch (Exception e){
                         System.out.println("Erro: " + e);
                     }
                     break;
-                case 9:
+                case 8: //Mostrar lucro liquído ganho
                     CaixaDB caixaDB3 = new CaixaDB();
                     double lucroLiquido = caixaDB3.lucroliquido();
                     try{
@@ -258,69 +250,34 @@ public class Main {
                         System.out.println("Erro: " + e);
                     }
                     break;
-                case 10:
+                case 9: //Mostrar todos os funcionários
                     FuncionarioDB funcionarioDB3 = new FuncionarioDB();
-                    if(funcionarioDB3.researchVerificarFuncionario() == null)
-                        System.out.println("Não há funcionários");
-                    else
-                        funcionarioDB3.researchFuncionario();
+                    funcionarioDB3.researchFuncionario();
                     break;
-                case 11:
+                case 10: //Mostrar todos os clientes
                     ClienteDB clienteDB = new ClienteDB();
-                    if(clienteDB.researchVerificaCliente() == null)
-                        System.out.println("Não há cliente");
-                    else
-                        clienteDB.researchCliente();
+                    clienteDB.researchCliente();
                     break;
-                case 12:
-                    System.out.println(" O cliente será fidelidade ou avulso: ");
-                    System.out.println("1 - Fidelidade");
-                    System.out.println("2 - Avulso");
-                    System.out.println("------------------------------------------------");
-                    System.out.print("Opção: ");
-                    int opAux2 = sc.nextInt();
+                case 11: //Mostrar todos os produtos
+                    ProdutoDB produtoDB = new ProdutoDB();
+                    produtoDB.researchProduto();
+                    break;
+                case 12: //Alterar cadastro do cliente
                     sc.nextLine();
+                    ClienteDB clienteDB1 = new ClienteDB();
+
+                    System.out.print("Digite o cpf do cliente: ");
+                    String cpf = sc.nextLine();
+                    System.out.print("Digite o nome do cliente: ");
+                    String nome = sc.nextLine();
+                    System.out.print("Digite o telefone do cliente:");
+                    String telefone = sc.nextLine();
+                    System.out.print("Digite o email do cliente:");
+                    String email = sc.nextLine();
                     System.out.println("------------------------------------------------");
-
-                    if (opAux2 == 1){
-                        Fidelidade fid = new Fidelidade();
-                        FidelidadeDB fidDB = new FidelidadeDB();
-                        ClienteDB clienteDB1 = new ClienteDB();
-
-                        System.out.print("Digite o cpf do cliente: ");
-                        fid.setCpf(sc.nextLine());
-                        sc.nextLine();
-                        System.out.print("Digite o nome do cliente: ");
-                        fid.setNome(sc.nextLine());
-                        System.out.print("Digite o telefone do cliente:");
-                        fid.setTelefone(sc.nextLine());
-                        System.out.print("Digite o email do cliente:");
-                        fid.setEmail(sc.nextLine());
-                        clienteDB1.updateClienteFidelidade(fid, fid.getCpf());
-                        fidDB.updateFkFidelidade(fid);
-                    }
-                    else if(opAux2 == 2){
-                        Avulso avu = new Avulso();
-                        AvulsoDB avuDB = new AvulsoDB();
-                        ClienteDB clienteDB2 = new ClienteDB();
-
-                        System.out.print("Digite o cpf do cliente: ");
-                        avu.setCpf(sc.nextLine());
-                        sc.nextLine();
-                        System.out.print("Digite o nome do cliente: ");
-                        avu.setNome(sc.nextLine());
-                        System.out.print("Digite o telefone do cliente:");
-                        avu.setTelefone(sc.nextLine());
-                        System.out.print("Digite o email do cliente:");
-                        avu.setEmail(sc.nextLine());
-                        clienteDB2.updateClienteAvulso(avu, avu.getCpf());
-                        avuDB.updateFkAvulso(avu);
-                    }
-                    else {
-                        System.out.println("Opção invalidade");
-                    }
+                    clienteDB1.updateCliente(cpf, nome, telefone, email);
                     break;
-                case 13:
+                case 13: //Alterar cliente avulso para fidelidade
                     sc.nextLine();
                     AvulsoDB avulsoDB = new AvulsoDB();
                     FidelidadeDB fidelidadeDB = new FidelidadeDB();
@@ -331,7 +288,7 @@ public class Main {
                     paraFidelidade.setCpf(cpfAvu);
                     fidelidadeDB.insertFidelidade(paraFidelidade);
                     break;
-                case 14:
+                case 14: //Alterar cliente fidelidade para avulso
                     sc.nextLine();
                     AvulsoDB avulsoDB1 = new AvulsoDB();
                     FidelidadeDB fidelidadeDB1 = new FidelidadeDB();
@@ -342,7 +299,7 @@ public class Main {
                     paraAvulso.setCpf(cpfFid);
                     avulsoDB1.insertAvulso(paraAvulso);
                     break;
-                case 15:
+                case 15: //Alterar cadastro do fornecedor
                     sc.nextLine();
                     Fornecedor forne = new Fornecedor();
                     FornecedorDB forneDB = new FornecedorDB();
@@ -355,7 +312,7 @@ public class Main {
                     forne.setEndereco(sc.nextLine());
                     forneDB.updateFkFornecedor(forne, forne.getCnpj());
                     break;
-                case 16:
+                case 16: //Alterar cadastro do funcionário
                     sc.nextLine();
                     Funcionario funcionario = new Funcionario();
                     FuncionarioDB funcionarioDB4 = new FuncionarioDB();
@@ -371,7 +328,7 @@ public class Main {
                     funcionario.setEndereco(sc.nextLine());
                     funcionarioDB4.updateFuncionario(funcionario, funcionario.getCpf());
                     break;
-                case 17:
+                case 17: //Alterar login
                     sc.nextLine();
                     Login login = new Login();
                     LoginDB loginDB = new LoginDB();
@@ -386,20 +343,22 @@ public class Main {
                     login.setSenha(sc.nextLine());
                     loginDB.updateLogin(login, loginDB.researchLogin(emailAntigo, senhaAntiga));
                     break;
-                case 18:
+                case 18: //Deletar funcionário
                     sc.nextLine();
                     FuncionarioDB funcionarioDB5 = new FuncionarioDB();
                     System.out.print("Digite o cpf: ");
-                    String cpf = sc.nextLine();
+                    String cpfFuncionario = sc.nextLine();
 
-                    funcionarioDB5.updateFuncionarioDemitido(funcionarioDB5.researchFuncionarioIdLogin(cpf), cpf);
+                    funcionarioDB5.updateFuncionarioDemitido(funcionarioDB5.researchFuncionarioIdLogin(cpfFuncionario), cpfFuncionario);
                     break;
-                case 19:
+                case 19: //Sair
                     flag = false;
-                    System.out.println("Você saiu. Tenha um bom dia!");
+                    System.out.println("VOCÊ SAIU, TENHA UM BOM DIA!");
+                    System.out.println("------------------------------------------------");
                     break;
                 default:
                     System.out.println("Não existe essa opção, tente novamente!");
+                    System.out.println("------------------------------------------------");
                     break;
             }
         }

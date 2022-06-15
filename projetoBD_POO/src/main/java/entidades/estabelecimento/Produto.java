@@ -12,14 +12,21 @@ public class Produto {
     ProdutoDB produtoDB = new ProdutoDB();
 
     public Produto(String nome, double custo, double preco) {
-        idProduto = (produtoDB.researchProduto() + 1);
         this.nome = nome;
         this.custo = custo;
         this.preco = preco;
     }
 
+    public Produto(int idProduto, String nome, double custo, double preco, int caixa_id, String cliente_cpf) {
+        this.idProduto = idProduto;
+        this.nome = nome;
+        this.custo = custo;
+        this.preco = preco;
+        Caixa_id = caixa_id;
+        Cliente_cpf = cliente_cpf;
+    }
+
     public Produto(){
-        idProduto = (produtoDB.researchProduto() + 1);
     }
 
     public String getNome() {

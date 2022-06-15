@@ -67,7 +67,7 @@ public class ClienteDB extends Database{
         return check;
     }
 
-    public double researchGastoClienteAvulso(String cpf){
+    public double researchGastoCliente(String cpf){
         connect();
 
         double gasto = 0;
@@ -99,66 +99,7 @@ public class ClienteDB extends Database{
         return gasto;
     }
 
-    public double researchGastoClienteFidelidade(String cpf){
-        connect();
-
-        double gasto = 0;
-        String sql = "SELECT * from cliente where cpf=?";
-        try{
-            pst = connection.prepareStatement(sql);
-            pst.setString(1,cpf);
-            pst.execute();
-            result = pst.executeQuery();
-
-            while(result.next()){
-                gasto = result.getDouble("gasto");
-            }
-        }
-        catch(SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-        }
-        finally {
-            try{
-                connection.close();
-                result.close();
-                pst.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-
-        return gasto;
-    }
-
-    public boolean updateClienteAvulso(Avulso avulso, String cpf){
-        connect();
-        String sql = "UPDATE cliente SET nome=?, telefone=?, email=? WHERE cpf=?";
-        try{
-            pst = connection.prepareStatement(sql);
-            pst.setString(1, avulso.getNome());
-            pst.setString(2, avulso.getTelefone());
-            pst.setString(3, avulso.getEmail());
-            pst.setString(4, cpf);
-            pst.execute();
-            check = true;
-        }catch (SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-            check = false;
-        }
-        finally {
-            try{
-                connection.close();
-                pst.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return check;
-    }
-
-    public boolean updateGastoClienteAvulso(String cpf, double gasto){
+    public boolean updateGastoCliente(String cpf, double gasto){
         connect();
         String sql = "UPDATE cliente SET gasto=? WHERE cpf=?";
         try{
@@ -184,14 +125,14 @@ public class ClienteDB extends Database{
         return check;
     }
 
-    public boolean updateClienteFidelidade(Fidelidade fidelidade, String cpf){
+    public boolean updateCliente(String cpf, String nome, String telefone, String email){
         connect();
         String sql = "UPDATE cliente SET nome=?, telefone=?, email=? WHERE cpf=?";
         try{
             pst = connection.prepareStatement(sql);
-            pst.setString(1, fidelidade.getNome());
-            pst.setString(2, fidelidade.getTelefone());
-            pst.setString(3, fidelidade.getEmail());
+            pst.setString(1, nome);
+            pst.setString(2, telefone);
+            pst.setString(3, email);
             pst.setString(4, cpf);
             pst.execute();
             check = true;
@@ -202,32 +143,6 @@ public class ClienteDB extends Database{
         finally {
             try{
                 connection.close();
-                pst.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return check;
-    }
-
-    public boolean updateGastoClienteFidelidade(String cpf, double gasto){
-        connect();
-        String sql = "UPDATE cliente SET gasto=? WHERE cpf=?";
-        try{
-            pst = connection.prepareStatement(sql);
-            pst.setDouble(1, gasto);
-            pst.setString(2, cpf);
-            pst.execute();
-            check = true;
-        }catch (SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-            check = false;
-        }
-        finally {
-            try{
-                connection.close();
-                result.close();
                 pst.close();
             }
             catch (SQLException e){
@@ -247,18 +162,26 @@ public class ClienteDB extends Database{
             result = statement.executeQuery(sql);
 
             while(result.next()){
-                System.out.println("------------------------------------------------");
                 //Avulso auxiliar - o cliente pode ou não ser avulso
                 Avulso avulsoTemp = new Avulso(result.getString("cpf"), result.getString("nome"),result.getString("telefone"),
                         result.getString("email"),result.getDouble("gasto"));
-                avulsoTemp.setCpf(result.getString("cpf"));
-                System.out.println("Cpf = " + avulsoTemp.getCpf());
-                System.out.println("Nome = " + avulsoTemp.getNome());
-                System.out.println("Telefone = " + avulsoTemp.getTelefone());
-                System.out.println("Email = " + avulsoTemp.getEmail());
-                System.out.println("Gasto = " + avulsoTemp.getGasto());
                 clientes.add(avulsoTemp);
-                System.out.println("------------------------------------------------");
+            }
+            if(clientes.size() != 0){
+                System.out.println("------------- CLIENTES -------------");
+                for (int i = 0; i < clientes.size(); i++) {
+                    System.out.println("Cpf = " + clientes.get(i).getCpf());
+                    System.out.println("Nome = " + clientes.get(i).getNome());
+                    System.out.println("Telefone = " + clientes.get(i).getTelefone());
+                    System.out.println("Email = " + clientes.get(i).getEmail());
+                    System.out.println("Gasto = " + clientes.get(i).getGasto());
+                    System.out.println("-------------------------------");
+                }
+            }
+            else{
+                System.out.println("-------------------------------");
+                System.out.println("Você não possui clientes.");
+                System.out.println("-------------------------------");
             }
         }catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -275,34 +198,4 @@ public class ClienteDB extends Database{
         }
     }
 
-    public ArrayList<Cliente> researchVerificaCliente(){
-        connect();
-        ArrayList<Cliente> clientes = new ArrayList<>();
-        String sql = "SELECT * from cliente";
-
-        try{
-            statement = connection.createStatement();
-            result = statement.executeQuery(sql);
-
-            while(result.next()){
-                //Avulso auxiliar - o cliente pode ou não ser avulso
-                Avulso avulsoTemp = new Avulso(result.getString("cpf"), result.getString("nome"),result.getString("telefone"),
-                        result.getString("email"));
-                clientes.add(avulsoTemp);
-            }
-        }catch(SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-        }
-        finally {
-            try{
-                connection.close();
-                statement.close();
-                result.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return clientes;
-    }
 }

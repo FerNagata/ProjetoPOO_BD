@@ -23,6 +23,9 @@ public class FuncionarioDB extends Database {
             pst.setInt(6,funcionario.Login_idLogin);
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("CADASTRO REALIZADO COM SUCESSO! BEM VINDO!");
+            System.out.println("------------------------------------------------");
         }
         catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -40,39 +43,10 @@ public class FuncionarioDB extends Database {
         return check;
     }
 
-    public ArrayList<Funcionario> researchVerificarFuncionario(){
-        connect();
-        ArrayList<Funcionario> funcionarios = new ArrayList<>();
-        String sql = "SELECT * from funcionario";
-
-        try{
-            statement = connection.createStatement();
-            result = statement.executeQuery(sql);
-
-            while(result.next()){
-                Funcionario funcionarioTemp = new Funcionario(result.getString("cpf"),result.getString("nome"),result.getDouble("salario"),result.getString("endereco"));
-                funcionarios.add(funcionarioTemp);
-            }
-        }catch(SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-        }
-        finally {
-            try{
-                connection.close();
-                statement.close();
-                result.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return funcionarios;
-    }
-
     public void researchFuncionario(){
         connect();
         ArrayList<Funcionario> funcionariosTrabalhando = new ArrayList<>();
-        ArrayList<Funcionario> funcionariosDemitidos = new ArrayList<>();
+        ArrayList<Funcionario> funcionariosNaoTrabalham = new ArrayList<>();
         String sql = "SELECT * from funcionario";
 
         try {
@@ -82,10 +56,11 @@ public class FuncionarioDB extends Database {
             while (result.next()) {
                 Funcionario funcionarioTemp = new Funcionario(result.getString("cpf"), result.getString("nome"), result.getDouble("salario"), result.getString("endereco"));
                 if (funcionarioTemp.getSalario() == 0)
-                    funcionariosDemitidos.add(funcionarioTemp);
+                    funcionariosNaoTrabalham.add(funcionarioTemp);
                 else
                     funcionariosTrabalhando.add(funcionarioTemp);
             }
+
             if(funcionariosTrabalhando.size() != 0){
                 System.out.println("---------- FUNCIONÁRIOS ----------");
                 for (int i = 0; i < funcionariosTrabalhando.size(); i++) {
@@ -100,20 +75,24 @@ public class FuncionarioDB extends Database {
             else {
                 System.out.println("-------------------------------");
                 System.out.println("Você não possui funcionário.");
+                System.out.println("-------------------------------");
             }
-            if (funcionariosDemitidos.size() != 0) {
-                System.out.println("----- FUNCIONÁRIOS DEMITIDOS -----");
-                for (int i = 0; i < funcionariosDemitidos.size(); i++) {
-                    System.out.println("Nome: " + funcionariosDemitidos.get(i).getNome());
-                    System.out.println("Cpf: " + funcionariosDemitidos.get(i).getCpf());
-                    System.out.println("Edereço: " + funcionariosDemitidos.get(i).getEndereco());
+
+            if (funcionariosNaoTrabalham.size() != 0) {
+                System.out.println("--- FUNCIONÁRIOS QUE NÃO TRABALHAM MAIS AQUI ---");
+                for (int i = 0; i < funcionariosNaoTrabalham.size(); i++) {
+                    System.out.println("Nome: " + funcionariosNaoTrabalham.get(i).getNome());
+                    System.out.println("Cpf: " + funcionariosNaoTrabalham.get(i).getCpf());
+                    System.out.println("Endereço: " + funcionariosNaoTrabalham.get(i).getEndereco());
                     System.out.println("-------------------------------");
                 }
                 System.out.print("\n");
             }
             else {
                 System.out.println("-------------------------------");
-                System.out.println("Você não tem nenhum funcionário demitido.");
+                System.out.println("Você não tem nenhum funcionário \n" +
+                        "que não trabalha mais aqui.");
+                System.out.println("-------------------------------");
             }
         }catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -236,6 +215,9 @@ public class FuncionarioDB extends Database {
             pst.setString(4,cpf);
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("DADOS DO FUNCIONÁRIO ALTERADO COM SUCESSO");
+            System.out.println("------------------------------------------------");
         }catch (SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
             check = false;
@@ -281,39 +263,21 @@ public class FuncionarioDB extends Database {
         return check;
     }
 
-    public boolean comprarAvulso(String cpf, int idProduto, int idCaixaAux){
+    public boolean comprar(String cpf, int idProduto, int idCaixaAux){
         ProdutoDB produtoDB = new ProdutoDB();
         CaixaDB caixaDB = new CaixaDB();
         ClienteDB clienteDB = new ClienteDB();
 
-        double gastoAvulso;
+        double gastoCliente;
         produtoDB.updateFkProduto(idProduto, idCaixaAux,cpf);
-        gastoAvulso = (clienteDB.researchGastoClienteAvulso(cpf)+produtoDB.researchPrecoProduto(idProduto));
 
-        clienteDB.updateGastoClienteAvulso(cpf, gastoAvulso);
+        gastoCliente = (clienteDB.researchGastoCliente(cpf)+produtoDB.researchPrecoProduto(idProduto));
+
+        clienteDB.updateGastoCliente(cpf, gastoCliente);
 
         caixaDB.updateFkCaixa(idCaixaAux, (produtoDB.researchPrecoProduto(idProduto)+caixaDB.researchGastoTotalCaixa(idCaixaAux)));
-
-        //produtoDB.deleteProduto(idProduto);
 
         return true;
     }
 
-    public boolean comprarFidelidade(String cpf, int idProduto, int idCaixaAux){
-        ProdutoDB produtoDB = new ProdutoDB();
-        CaixaDB caixaDB = new CaixaDB();
-        ClienteDB clienteDB = new ClienteDB();
-
-        double gastoFidelidade;
-        produtoDB.updateFkProduto(idProduto, idCaixaAux,cpf);
-        gastoFidelidade = (clienteDB.researchGastoClienteFidelidade(cpf)+produtoDB.researchPrecoProduto(idProduto));
-
-        clienteDB.updateGastoClienteFidelidade(cpf, gastoFidelidade);
-
-        caixaDB.updateFkCaixa(idCaixaAux, (produtoDB.researchPrecoProduto(idProduto)+caixaDB.researchGastoTotalCaixa(idCaixaAux)));
-
-        //produtoDB.deleteProduto(idProduto);
-
-        return true;
-    }
 }

@@ -107,6 +107,9 @@ public class LoginDB extends Database {
             pst.setInt(3, idLogin);
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("DADOS DO LOGIN ALTERADO COM SUCESSO");
+            System.out.println("------------------------------------------------");
         }catch (SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
             check = false;

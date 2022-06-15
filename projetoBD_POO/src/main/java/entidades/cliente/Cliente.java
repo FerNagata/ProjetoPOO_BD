@@ -60,7 +60,4 @@ public abstract class Cliente {
         return gasto;
     }
 
-    public void setGasto(double gasto) {
-        this.gasto = gasto;
-    }
 }

@@ -1,6 +1,5 @@
 package Controler;
 
-import entidades.cliente.Avulso;
 import entidades.estabelecimento.Caixa;
 
 import java.sql.*;
@@ -129,12 +128,9 @@ public class CaixaDB extends Database{
 
     public double lucroliquido(){
         try {
-            ProdutoDB produtoDB = new ProdutoDB();
-            FuncionarioDB funcionarioDB = new FuncionarioDB();
-
-            return (calculoDoLucro() - produtoDB.custoTotal() - funcionarioDB.custoSalario());
+            return (calculoDoLucro() - despesasTotais());
         }catch(NullPointerException e){
-            System.out.println("Não há produtos registrados!");
+            System.out.println("Erro ao calcular o lucro líquido!");
             return 0;
         }
     }
@@ -146,8 +142,7 @@ public class CaixaDB extends Database{
 
             return (produtoDB.custoTotal() + funcionarioDB.custoSalario());
         }catch(NullPointerException e){
-            System.out.println("Não há produtos registrados!");
-
+            System.out.println("Erro ao calcular as despesas!");
             return 0;
         }
 

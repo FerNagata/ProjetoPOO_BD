@@ -14,6 +14,9 @@ public class AvulsoDB extends Database{
             pst.setString(2, avulso.getCpf());
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("CLIENTE AVULSO CADASTRADO COM SUCESSO!");
+            System.out.println("------------------------------------------------");
         }
         catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -57,32 +60,6 @@ public class AvulsoDB extends Database{
             }
         }
         return id;
-    }
-
-    public boolean updateFkAvulso(Avulso avulso){
-        connect();
-        String sql = "UPDATE avulso SET Cliente_cpf=? WHERE idAvulso=?";
-        try{
-            pst = connection.prepareStatement(sql);
-            pst.setString(1, avulso.getCpf());
-            pst.setInt(2, avulso.getIdAvulso());
-            pst.execute();
-            check = true;
-        }catch (SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-            System.out.println("Cliente não encontrado!");
-            check = false;
-        }
-        finally {
-            try{
-                connection.close();
-                pst.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return check;
     }
 
     public boolean deleteAvulso(String cpf){

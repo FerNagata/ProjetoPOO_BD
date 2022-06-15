@@ -26,7 +26,4 @@ public class Caixa {
         return lucro;
     }
 
-    public void setLucro(double lucro) {
-        this.lucro = lucro;
-    }
 }

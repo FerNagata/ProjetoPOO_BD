@@ -6,7 +6,6 @@ public class Fornecedor {
     private String nome;
     public int Caixa_id;
 
-
     public Fornecedor(String cnpj, String endereco, String nome) {
         this.cnpj = cnpj;
         this.endereco = endereco;

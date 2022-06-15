@@ -1,10 +1,8 @@
 package Controler;
 
-import entidades.cliente.Avulso;
 import entidades.cliente.Fidelidade;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class FidelidadeDB extends Database {
     public boolean insertFidelidade(Fidelidade fidelidade){
@@ -16,6 +14,9 @@ public class FidelidadeDB extends Database {
             pst.setString(2,fidelidade.getCpf());
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("CLIENTE FIDELIDADE CADASTRADO COM SUCESSO!");
+            System.out.println("------------------------------------------------");
         }
         catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -58,32 +59,6 @@ public class FidelidadeDB extends Database {
             }
         }
         return id;
-    }
-
-    public boolean updateFkFidelidade(Fidelidade fidelidade){
-        connect();
-        String sql = "UPDATE fidelidade SET Cliente_cpf=? WHERE idFidelidade=?";
-        try{
-            pst = connection.prepareStatement(sql);
-            pst.setString(1, fidelidade.getCpf());
-            pst.setInt(2, fidelidade.getIdFidelidade());
-            pst.execute();
-            check = true;
-        }catch (SQLException e){
-            System.out.println("Erro de operação: " + e.getMessage());
-            System.out.println("Cliente não encontrado!");
-            check = false;
-        }
-        finally {
-            try{
-                connection.close();
-                pst.close();
-            }
-            catch (SQLException e){
-                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
-        }
-        return check;
     }
 
     public boolean deleteFidelidade(String cpf){

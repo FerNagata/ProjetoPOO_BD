@@ -16,6 +16,9 @@ public class FornecedorDB extends Database{
             pst.setInt(4,fornecedor.Caixa_id);
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("FORNECEDOR CADASTRADO COM SUCESSO!");
+            System.out.println("------------------------------------------------");
         }
         catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -43,6 +46,7 @@ public class FornecedorDB extends Database{
             statement = connection.createStatement();
             result = statement.executeQuery(sql);
 
+            System.out.println("------------- FORNECEDORES -------------");
             while(result.next()){
                 Fornecedor fornecedorTemp = new Fornecedor(result.getString("cnpj"),result.getString("endereco"),result.getString("nome"));
                 fornecedorTemp.setCnpj(result.getString("cnpj"));
@@ -83,6 +87,9 @@ public class FornecedorDB extends Database{
             pst.setString(3, cnpj);
             pst.execute();
             check = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("DADOS DO FORNECEDOR ALTERADO COM SUCESSO");
+            System.out.println("------------------------------------------------");
         }catch (SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
             check = false;
