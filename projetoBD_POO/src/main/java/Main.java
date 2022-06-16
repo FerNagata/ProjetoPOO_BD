@@ -191,7 +191,6 @@ public class Main {
                     p.setCusto(sc.nextDouble());
                     System.out.print("Digite o preço do produto: ");
                     p.setPreco(sc.nextDouble());
-                    p.Caixa_id = idCaixaAux;
                     proDB.insertProduto(p);
                     break;
                 case 4: //Compra feita por um cliente
@@ -243,7 +242,7 @@ public class Main {
                     double lucroLiquido = caixaDB3.lucroliquido();
                     try{
                         if (lucroLiquido == 0)
-                            System.out.println("A loja ainda não possui despesas");
+                            System.out.println("A loja ainda não possui um lucro líquido");
                         else
                             System.out.println("Lucro total: " + lucroLiquido);
                     }catch (Exception e){

@@ -7,12 +7,6 @@ public class Avulso extends Cliente {
     public String Cliente_cpf;
     AvulsoDB avulsoDB = new AvulsoDB();
 
-    public Avulso(String cpf, String nome, String telefone, String email) {
-        super(cpf, nome, telefone, email);
-        idAvulso = (avulsoDB.researchAvulso() + 1);
-        Cliente_cpf = cpf;
-    }
-
     public Avulso(String cpf, String nome, String telefone, String email, double gasto) {
         super(cpf, nome, telefone, email, gasto);
         Cliente_cpf = cpf;

@@ -9,7 +9,6 @@ public class Produto {
     private double preco;
     public int Caixa_id;
     public String Cliente_cpf;
-    ProdutoDB produtoDB = new ProdutoDB();
 
     public Produto(String nome, double custo, double preco) {
         this.nome = nome;

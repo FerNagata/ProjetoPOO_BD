@@ -9,7 +9,6 @@ public class Caixa {
     CaixaDB caixaDB = new CaixaDB();
 
     public Caixa(double lucro) {
-        this.idCaixa = (caixaDB.researchCaixa() + 1);
         this.lucro = lucro;
     }
 
